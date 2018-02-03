@@ -18,10 +18,15 @@ func Test_main(t *testing.T) {
 		{`"foo"`, []string{"foo"}, false},
 		{`"foo bar"`, []string{"foo bar"}, false},
 		{`"foo" "bar"`, []string{"foo", "bar"}, false},
+		{`"foo""bar"`, []string{"foobar"}, false},
 		{`'foo'`, []string{"foo"}, false},
 		{`'foo bar'`, []string{"foo bar"}, false},
 		{`'foo' 'bar'`, []string{"foo", "bar"}, false},
 		{`'foo' 'bar'`, []string{"foo", "bar"}, false},
+		{`'foo''bar'`, []string{"foobar"}, false},
+		{`'"foo bar"'`, []string{`"foo bar"`}, false},
+		{`'"'foo bar'"'`, []string{`"foo`, `bar"`}, false},
+		{`''foo''`, []string{`foo`}, false},
 	}
 
 	for _, c := range cases {

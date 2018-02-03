@@ -12,21 +12,29 @@ func Parse(in string) ([]string, error) {
 
 	var needCloseDoubleQuote, needCloseSingleQuote bool
 	s := make([]rune, 0, len(in))
-	for _, r := range in {
+	for i, r := range in {
 		log.Println(string(r))
 		switch r {
 		case '\'':
 			if needCloseSingleQuote {
-				if stack[len(stack)-1] != '"' {
+				if stack[len(stack)-1] != '\'' {
 					return nil, errors.New("open single quote missing")
 				}
 				stack = stack[:len(stack)-1]
-				out = append(out, string(s))
-				s = []rune{}
+
+				// if next char is space, split word
+				if len(in)-1 > i+1 && in[i+1] == ' ' {
+					out = append(out, string(s))
+					s = []rune{}
+				}
 				needCloseSingleQuote = false
 			} else {
-				stack = append(stack, '"')
-				needCloseSingleQuote = true
+				if len(stack) == 0 {
+					stack = append(stack, '\'')
+					needCloseSingleQuote = true
+				} else {
+					s = append(s, r)
+				}
 			}
 		case '"':
 			if needCloseDoubleQuote {
@@ -34,12 +42,19 @@ func Parse(in string) ([]string, error) {
 					return nil, errors.New("open double quote missing")
 				}
 				stack = stack[:len(stack)-1]
-				out = append(out, string(s))
-				s = []rune{}
 				needCloseDoubleQuote = false
+				// if next char is space, split word
+				if len(in)-1 > i+1 && in[i+1] == ' ' {
+					out = append(out, string(s))
+					s = []rune{}
+				}
 			} else {
-				stack = append(stack, '"')
-				needCloseDoubleQuote = true
+				if len(stack) == 0 {
+					stack = append(stack, '"')
+					needCloseDoubleQuote = true
+				} else {
+					s = append(s, r)
+				}
 			}
 		case ' ':
 			// out of quote
