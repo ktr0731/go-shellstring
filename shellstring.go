@@ -1,4 +1,4 @@
-package main
+package shellstring
 
 import (
 	"errors"
