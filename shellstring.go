@@ -3,7 +3,6 @@ package shellstring
 import (
 	"errors"
 	"fmt"
-	"log"
 )
 
 func Parse(in string) ([]string, error) {
@@ -13,7 +12,6 @@ func Parse(in string) ([]string, error) {
 	var needCloseDoubleQuote, needCloseSingleQuote bool
 	s := make([]rune, 0, len(in))
 	for i, r := range in {
-		log.Println(string(r))
 		switch r {
 		case '\'':
 			if needCloseSingleQuote {
