@@ -21,13 +21,15 @@ func Parse(in string) ([]string, error) {
 					return nil, errors.New("open single quote missing")
 				}
 				stack = stack[:len(stack)-1]
+				needCloseSingleQuote = false
 
 				// if next char is space, split word
 				if len(in)-1 > i+1 && in[i+1] == ' ' {
 					out = append(out, string(s))
-					s = []rune{}
+					s = nil
+				} else if len(stack) == 0 && len(s) == 0 && (len(in)-1 > i+1 && in[i+1] == ' ' || len(in)-1 == i) {
+					out = append(out, "")
 				}
-				needCloseSingleQuote = false
 			} else {
 				if len(stack) == 0 {
 					stack = append(stack, '\'')
@@ -46,7 +48,9 @@ func Parse(in string) ([]string, error) {
 				// if next char is space, split word
 				if len(in)-1 > i+1 && in[i+1] == ' ' {
 					out = append(out, string(s))
-					s = []rune{}
+					s = nil
+				} else if len(stack) == 0 && len(s) == 0 && (len(in)-1 > i+1 && in[i+1] == ' ' || len(in)-1 == i) {
+					out = append(out, "")
 				}
 			} else {
 				if len(stack) == 0 {
@@ -61,7 +65,7 @@ func Parse(in string) ([]string, error) {
 			if len(stack) == 0 {
 				if len(s) != 0 {
 					out = append(out, string(s))
-					s = []rune{}
+					s = nil
 				}
 			} else {
 				s = append(s, r)
