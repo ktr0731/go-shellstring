@@ -6,8 +6,10 @@ import (
 )
 
 func Parse(in string) ([]string, error) {
-	stack := []rune{}
-	out := []string{}
+	var (
+		stack []rune
+		out   []string
+	)
 
 	var needCloseDoubleQuote, needCloseSingleQuote bool
 	s := make([]rune, 0, len(in))
