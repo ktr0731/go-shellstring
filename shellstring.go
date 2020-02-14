@@ -75,7 +75,7 @@ func Parse(in string) ([]string, error) {
 		}
 	}
 	if len(stack) != 0 {
-		return nil, fmt.Errorf("corrensponding symbol missing: %q", stack)
+		return nil, fmt.Errorf("corrensponding symbol missing: %s", stack)
 	}
 	if len(s) != 0 {
 		out = append(out, string(s))
